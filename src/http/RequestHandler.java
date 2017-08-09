@@ -43,6 +43,7 @@ public class RequestHandler extends Thread {
 					request = line;
 					break;
 				}
+			}
 				consoleLog(request);
 				
 				//요청 분석
@@ -55,7 +56,6 @@ public class RequestHandler extends Thread {
 					//response400Error(os,token[2]);
 					consoleLog("Bad Request");
 				}
-			}
 
 			// 예제 응답입니다.
 			// 서버 시작과 테스트를 마친 후, 주석 처리 합니다.
