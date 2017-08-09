@@ -53,7 +53,7 @@ public class RequestHandler extends Thread {
 				{
 					responseStaticResource(os, tokens[1], tokens[2]);
 				}else {
-					//response400Error(os,token[2]);
+					response400Error(os,tokens[2]);
 					consoleLog("Bad Request");
 				}
 
@@ -95,7 +95,7 @@ public class RequestHandler extends Thread {
 		File file = new File(DOCUMENT_ROOT + "/" + url);
 		if(file.exists() == false)
 		{
-			//response404Error(os,protocol);
+			response404Error(os,protocol);
 			consoleLog("404 Error");
 			return;
 		}
@@ -106,9 +106,9 @@ public class RequestHandler extends Thread {
 		
 		os.write((protocol + " 200 OK\r\n").getBytes("UTF-8"));
 		os.write( ("Content-Type:"+ mimeType+"; charset=utf-8\r\n").getBytes( "UTF-8" ) );
-		 os.write( "\r\n".getBytes() ); 
+		os.write( "\r\n".getBytes() ); 
 		 
-		 //body 전송
+		//body 전송
 		 os.write(body);
 		/*
 		 * os.write( "HTTP/1.1 200 OK\r\n".getBytes( "UTF-8" ) ); 
@@ -118,6 +118,44 @@ public class RequestHandler extends Thread {
 		 * "<h1>이 페이지가 잘 보이면 실습과제 SimpleHttpServer를 시작할 준비가 된 것입니다.</h1>".getBytes(
 		 * "UTF-8" ) );
 		 */
+	}
+	
+	public void response404Error(OutputStream os, String protocol) throws IOException
+	{
+		String url = "/error/404.html";
+
+		File file = new File(DOCUMENT_ROOT + "/" + url);
+		
+		System.out.println(file.getPath());
+
+		byte[] body = Files.readAllBytes(file.toPath());
+		String mimeType = Files.probeContentType(file.toPath());
+
+		// header 전송
+		os.write((protocol + " 200 OK\r\n").getBytes("UTF-8"));
+		os.write(("Content-Type:" + mimeType + "; charset=utf-8\r\n").getBytes("UTF-8"));
+		os.write("\r\n".getBytes());
+		// body 전송
+		os.write(body);
+	}
+	
+	public void response400Error(OutputStream os, String protocol) throws IOException
+	{
+		String url = "/error/400.html";
+
+		File file = new File(DOCUMENT_ROOT + "/" + url);
+		
+		System.out.println(file.getPath());
+
+		byte[] body = Files.readAllBytes(file.toPath());
+		String mimeType = Files.probeContentType(file.toPath());
+
+		// header 전송
+		os.write((protocol + " 200 OK\r\n").getBytes("UTF-8"));
+		os.write(("Content-Type:" + mimeType + "; charset=utf-8\r\n").getBytes("UTF-8"));
+		os.write("\r\n".getBytes());
+		// body 전송
+		os.write(body);
 	}
 
 }
